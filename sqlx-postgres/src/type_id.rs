@@ -12,6 +12,7 @@ pub enum PgTypeId {
 
 // Data Types
 // https://www.postgresql.org/docs/current/datatype.html
+// for OIDs see: https://github.com/postgres/postgres/blob/master/src/include/catalog/pg_type.dat
 
 impl PgTypeId {
     // Boolean
@@ -36,6 +37,11 @@ impl PgTypeId {
     #[doc(alias = "SMALLSERIAL")]
     pub const SMALLINT: Self = Self::Oid(21);
 
+    /// Array of [`SMALLINT`][Self::SMALLINT].
+    ///
+    /// Maps to `&[i16]` / `Vec<i16>`.
+    pub const SMALLINT_ARRAY: Self = Self::Oid(1005);
+
     /// A 4-byte integer.
     ///
     /// Compatible with any primitive integer type.
@@ -45,6 +51,11 @@ impl PgTypeId {
     #[doc(alias = "INT4")]
     #[doc(alias = "SERIAL")]
     pub const INTEGER: Self = Self::Oid(23);
+
+    /// Array of [`INTEGER`][Self::INTEGER]
+    ///
+    /// Maps to `&[i16]` / `Vec<i32>`.
+    pub const INTEGER_ARRAY: Self = Self::Oid(1007);
 
     /// An 8-byte integer.
     ///
@@ -114,7 +125,17 @@ impl PgTypeId {
             Self::REAL => "REAL",
             Self::DOUBLE => "DOUBLE",
 
+            Self::Name(name) => name,
+
             _ => "UNKNOWN",
+        }
+    }
+
+    pub(crate) const fn oid(self) -> Option<u32> {
+        if let Self::Oid(oid) = self {
+            Some(oid)
+        } else {
+            None
         }
     }
 
