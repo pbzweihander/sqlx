@@ -12,7 +12,10 @@ mode with `sqlx::query!()` and friends.
 $ cargo install sqlx-cli
 
 # only for postgres
-$ cargo install sqlx-cli --no-default-features --features postgres
+$ cargo install sqlx-cli --no-default-features --features native-tls,postgres
+
+# with rustls
+$ cargo install sqlx-cli --no-default-features --features rustls,postgres
 ```
 
 ### Usage
